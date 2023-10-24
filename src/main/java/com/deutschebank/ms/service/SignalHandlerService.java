@@ -1,7 +1,13 @@
 package com.deutschebank.ms.service;
 
 import com.deutschebank.ms.algo.Algo;
+import com.deutschebank.ms.exception.InvalidOperationException;
+import com.deutschebank.ms.model.Signal;
+import com.deutschebank.ms.util.SignalUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class SignalHandlerService implements SignalHandler {
@@ -37,4 +43,11 @@ public class SignalHandlerService implements SignalHandler {
         algo.doAlgo();
     }
 
+    public void addSignals(Signal signal) throws InvalidOperationException {
+        SignalUtils.addSignal(signal.getSignalId(), signal.getOps());
+    }
+
+    public Map<Integer, List<String>> getSignals() {
+        return SignalUtils.getSigOpsMap();
+    }
 }
