@@ -6,7 +6,6 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SignalUtils {
@@ -23,7 +22,7 @@ public class SignalUtils {
                         "setAlgoParam")
                 .toList();
         for (String op : ops) {
-            if (!allowedOps.contains(op) || !op.matches("setAlgoParam(\\d,\\d)"))
+            if (!allowedOps.contains(op))
                 throw new InvalidOperationException();
         }
         sigOpsMap.put(signalId, ops);

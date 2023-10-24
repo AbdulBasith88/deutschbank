@@ -9,32 +9,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Controller
-@RequestMapping("signal")
+@RestController
+@RequestMapping("/signal")
 public class SignalHandlerController {
     @Autowired
     private SignalHandlerService signalHandler;
 
-    @PostMapping("/{signalId}")
+    @GetMapping("/{signalId}")
     public void processSignal(@PathVariable int signalId) {
         signalHandler.handleSignal(signalId);
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity.BodyBuilder addSignal(@RequestBody Signal signal) {
+    public ResponseEntity addSignal(@RequestBody Signal signal) {
         try {
             signalHandler.addSignals(signal);
         } catch (InvalidOperationException ex) {
-            return ResponseEntity.badRequest();
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<Integer, List<String>> getSignals(@PathVariable int signalId) {
-        return signalHandler.getSignals();
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Signal> getSignals() {
+        List<Signal> signalList = new ArrayList<>();
+        for (Map.Entry<Integer, List<String>> e : signalHandler.getSignals().entrySet()) {
+            signalList.add(new Signal(e.getKey(), e.getValue()));
+        }
+        return signalList;
     }
 }
