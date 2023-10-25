@@ -1,6 +1,5 @@
 package com.deutschebank.ms.utils;
 
-import com.deutschebank.ms.exception.DuplicateSignalException;
 import com.deutschebank.ms.exception.InvalidOperationException;
 import com.deutschebank.ms.util.SignalUtils;
 import org.junit.Assert;
@@ -31,13 +30,11 @@ public class SignalUtilsTest {
     }
 
     @Test
-    public void testAddSignalToAddExistingSignal() {
-        Map<Integer, List<String>> signals = new HashMap<>();
-        signals.put(1, Stream.of("abc").toList());
-        ReflectionTestUtils.setField(utils, "sigOpsMap", signals);
-        Assertions.assertThrows(DuplicateSignalException.class, () -> {
-            SignalUtils.addSignal(1, Stream.of("xyz").toList());
-        });
+    public void testAddSignalToAddExistingSignal() throws InvalidOperationException{
+        SignalUtils.addSignal(1, Stream.of("doAlgo").toList());
+        Assert.assertTrue(SignalUtils.getSigOpsMap().get(1).contains("doAlgo"));
+        SignalUtils.addSignal(1, Stream.of("setUp").toList());
+        Assert.assertTrue(SignalUtils.getSigOpsMap().get(1).contains("setUp"));
     }
 
     @Test
@@ -48,14 +45,14 @@ public class SignalUtilsTest {
     }
 
     @Test
-    public void testAddSignal() throws DuplicateSignalException, InvalidOperationException {
+    public void testAddSignal() throws InvalidOperationException {
         SignalUtils.addSignal(1, Stream.of("doAlgo").toList());
         Assert.assertEquals("The number of signal added is incorrect",
                 1, SignalUtils.getSigOpsMap().size());
     }
 
     @Test
-    public void testAddSignalValidSetAlgoParamOp() throws DuplicateSignalException, InvalidOperationException {
+    public void testAddSignalValidSetAlgoParamOp() throws  InvalidOperationException {
         SignalUtils.addSignal(1, Stream.of("setAlgoParam(23,100)").toList());
         Assert.assertEquals("The number of signal added is incorrect",
                 1, SignalUtils.getSigOpsMap().size());

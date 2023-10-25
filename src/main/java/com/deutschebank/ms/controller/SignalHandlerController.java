@@ -1,6 +1,5 @@
 package com.deutschebank.ms.controller;
 
-import com.deutschebank.ms.exception.DuplicateSignalException;
 import com.deutschebank.ms.exception.InvalidOperationException;
 import com.deutschebank.ms.model.Signal;
 import com.deutschebank.ms.service.SignalHandlerService;
@@ -26,7 +25,7 @@ public class SignalHandlerController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void addSignal(@RequestBody Signal signal) throws InvalidOperationException, DuplicateSignalException {
+    public void addSignal(@RequestBody Signal signal) throws InvalidOperationException {
         signalHandler.addSignals(signal);
     }
 

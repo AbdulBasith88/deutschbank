@@ -1,6 +1,5 @@
 package com.deutschebank.ms.util;
 
-import com.deutschebank.ms.exception.DuplicateSignalException;
 import com.deutschebank.ms.exception.InvalidOperationException;
 import lombok.Getter;
 
@@ -17,7 +16,7 @@ public class SignalUtils {
     @Getter
     private static Map<Integer, List<String>> sigOpsMap = new HashMap<>();
 
-    public static void addSignal(int signalId, List<String> ops) throws InvalidOperationException, DuplicateSignalException {
+    public static void addSignal(int signalId, List<String> ops) throws InvalidOperationException {
         // List of permitted operations/tasks
         List<String> allowedOps = Stream.of("doAlgo",
                         "cancelTrades",
@@ -27,10 +26,6 @@ public class SignalUtils {
                         "setUp",
                         "setAlgoParam")
                 .toList();
-        // If the signal ID exists, it is not overwritten
-        if (sigOpsMap.keySet().contains(signalId)) {
-            throw new DuplicateSignalException();
-        }
         for (String op : ops) {
             // valid operation is setAlgoParam(num,num)
             if (op.contains("setAlgoParam")) {

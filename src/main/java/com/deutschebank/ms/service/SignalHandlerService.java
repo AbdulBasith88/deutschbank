@@ -1,7 +1,6 @@
 package com.deutschebank.ms.service;
 
 import com.deutschebank.ms.algo.Algo;
-import com.deutschebank.ms.exception.DuplicateSignalException;
 import com.deutschebank.ms.exception.InvalidOperationException;
 import com.deutschebank.ms.model.Signal;
 import com.deutschebank.ms.util.SignalUtils;
@@ -59,7 +58,7 @@ public class SignalHandlerService implements SignalHandler {
         algo.doAlgo(); // It runs at the end of all operations as specified in the example
     }
 
-    public void addSignals(Signal signal) throws InvalidOperationException, DuplicateSignalException {
+    public void addSignals(Signal signal) throws InvalidOperationException {
         SignalUtils.addSignal(signal.getSignalId(), signal.getOps());
     }
 

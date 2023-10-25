@@ -17,10 +17,4 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, req);
     }
 
-    @ExceptionHandler(DuplicateSignalException.class)
-    protected ResponseEntity<Object> handleDuplicateSignalException(DuplicateSignalException ex, WebRequest req) {
-        Object resBody = "A signal with the specified signal id exists.";
-        return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, req);
-    }
-
 }
