@@ -1,12 +1,12 @@
 package com.deutschebank.ms.controller;
 
+import com.deutschebank.ms.exception.DuplicateSignalException;
 import com.deutschebank.ms.exception.InvalidOperationException;
 import com.deutschebank.ms.model.Signal;
 import com.deutschebank.ms.service.SignalHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,19 +19,15 @@ public class SignalHandlerController {
     @Autowired
     private SignalHandlerService signalHandler;
 
-    @GetMapping("/{signalId}")
+    @PostMapping("/{signalId}")
     public void processSignal(@PathVariable int signalId) {
         signalHandler.handleSignal(signalId);
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addSignal(@RequestBody Signal signal) {
-        try {
-            signalHandler.addSignals(signal);
-        } catch (InvalidOperationException ex) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.OK)
+    public void addSignal(@RequestBody Signal signal) throws InvalidOperationException, DuplicateSignalException {
+        signalHandler.addSignals(signal);
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
